@@ -1,0 +1,16 @@
+server:
+  port: 80
+
+spring:
+  datasource:
+    username: phc
+    password: 1394
+    url: jdbc:mariadb://127.0.0.1:3306/kakao
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    open-in-view: false
+    defer-datasource-initialization: true
+    hibernate.ddl-auto: none
+    properties:
+      hibernate.format_sql: true
+#  sql.init.mode: always
