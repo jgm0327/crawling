@@ -16,12 +16,12 @@
             <th>할인 가격</th>
         </tr>
         <tr th:each="lecture : ${lecture} ">
-            <td><img style="width: 5rem; height: 3rem" th:src="${lecture.image}" alt="image"/></td>
-            <td><span th:text="${lecture.salePercent}"></span></td>
-            <td><a th:href="${lecture.url}"><span th:text="${lecture.title}"></span></a></td>
+            <td><img style="width: 5rem; height: 3rem" th:src="${lecture.image_link}" alt="image"/></td>
+            <td><span th:text="${lecture.sale_percent}"></span></td>
+            <td><a th:href="${lecture.site_link}"><span th:text="${lecture.title}"></span></a></td>
             <td><span th:text="${lecture.instructor}"></span></td>
-            <td><span th:text="${lecture.price}"></span></td>
-            <td><span th:text="${lecture.salePrice}"></span></td>
+            <td><span th:text="${lecture.ordinary_price}"></span></td>
+            <td><span th:text="${lecture.sale_price}"></span></td>
         </tr>
     </table>
 </div>

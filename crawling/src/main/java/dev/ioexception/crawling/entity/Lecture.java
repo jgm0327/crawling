@@ -1,5 +1,6 @@
 package dev.ioexception.crawling.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,29 +15,36 @@ import lombok.Getter;
 public class Lecture {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String image;
-    private String salePercent;
+    private String lecture_Id;
+
     private String title;
-    private String url;
     private String instructor;
-    private String price;
-    private String salePrice;
+    private String company_name;
+    private int view_count;
+    private String ordinary_price;
+    private String sale_price;
+    private String sale_percent;
+    private String description;
+    private String image_link;
+    private String site_link;
 
     public Lecture() {
 
     }
 
-    public Lecture(Long id, String image, String salePercent, String title, String url, String instructor, String price,
-                   String salePrice) {
-        this.id = id;
-        this.image = image;
-        this.salePercent = salePercent;
+    public Lecture(String lecture_Id, String title, String instructor, String company_name, int view_count,
+        String ordinary_price, String sale_price, String sale_percent, String description, String image_link,
+        String site_link) {
+        this.lecture_Id = lecture_Id;
         this.title = title;
-        this.url = url;
         this.instructor = instructor;
-        this.price = price;
-        this.salePrice = salePrice;
+        this.company_name = company_name;
+        this.view_count = view_count;
+        this.ordinary_price = ordinary_price;
+        this.sale_price = sale_price;
+        this.sale_percent = sale_percent;
+        this.description = description;
+        this.image_link = image_link;
+        this.site_link = site_link;
     }
 }
