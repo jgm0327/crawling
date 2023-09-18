@@ -15,7 +15,7 @@ import lombok.Getter;
 @Entity
 @Getter
 public class Tag {
-
+    
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tag_id;
 

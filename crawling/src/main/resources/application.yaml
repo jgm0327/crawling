@@ -5,7 +5,7 @@ spring:
   datasource:
     username: admin
     password: adminadmin
-    url: jdbc:mariadb://crawling-server.c4y9vm1irfhh.ap-northeast-2.rds.amazonaws.com/classmoa
+    url: jdbc:mariadb://crawling-server.c4y9vm1irfhh.ap-northeast-2.rds.amazonaws.com:3306/classmoa
     driver-class-name: org.mariadb.jdbc.Driver
 
   #의존성 추가
@@ -20,10 +20,8 @@ spring:
     hibernate.ddl-auto: update
     properties:
       hibernate.format_sql: true
-#  sql.init.mode: always
+    generate-ddl: true
 
-
-#의존성 추가
 cloud:
   aws:
     credentials:
@@ -35,3 +33,9 @@ cloud:
       static: ap-northeast-2 # 리전
     stack:
       auto: false # Spring Cloud는 환경 또는 스택을 기반으로 이를 자동으로 감지
+
+logging:
+  level:
+    web: debug
+#  sql.init.mode: always
+

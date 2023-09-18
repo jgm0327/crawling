@@ -18,11 +18,23 @@ public class CrawlingController {
     @GetMapping("/mega")
     public String megacraw(Model model) throws IOException {
         List<Lecture> lectureList = crawlingService.getMega();
-
         model.addAttribute("lecture", lectureList);
         return "lecture";
     }
 
+    @GetMapping("/ybm")
+    public String craw(Model model) throws IOException, InterruptedException {
+        List<Lecture> lectureList = crawlingService.getYbm();
+        model.addAttribute("lecture", lectureList);
+        return "lecture";
+    }
+    @GetMapping("/artandstudy")
+    public String crawArtandStudy(Model model) throws IOException, InterruptedException {
+        List<Lecture> lectureList = crawlingService.getArtandStudy();
+        
+        model.addAttribute("lecture", lectureList);
+        return "lecture";
+    }
     @GetMapping("/goorm")
     public String goormcraw(Model model) throws IOException {
         List<Lecture> lectureList = crawlingService.getGoorm();
@@ -30,4 +42,6 @@ public class CrawlingController {
         model.addAttribute("lecture", lectureList);
         return "lecture";
     }
+
 }
+

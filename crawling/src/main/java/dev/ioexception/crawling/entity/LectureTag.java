@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class LectureTag {
-
+    
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long lectag_id;
 
