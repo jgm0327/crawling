@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,21 +14,22 @@ import lombok.Getter;
 
 @Entity
 @Getter
-@Builder
 public class Tag {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "tag_id")
-	private Long id;
+	private Long tag_id;
 
 	private String name;
 
-	@OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+	// orphanRemoval = true는 Tag 엔티티에서 삭제된 LectureTag 엔티티도 실제로 데이터베이스에서 삭제되도록 설정합니다.
+	@OneToMany(mappedBy = "tag", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<LectureTag> lectureTags = new ArrayList<>();
 
 	public Tag() {
-
 	}
 
-	//연관관계 메서드 작성
+	@Builder
+	public Tag(String name) {
+		this.name = name;
+	}
 }

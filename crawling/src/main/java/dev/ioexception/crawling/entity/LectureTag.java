@@ -9,17 +9,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor
 public class LectureTag {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "lectag_id")
-	private Long id;
+	private Long lectag_id;
 
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "lecture_id")
@@ -29,5 +28,13 @@ public class LectureTag {
 	@JoinColumn(name = "tag_id")
 	private Tag tag;
 
+	public void setLecture(Lecture lecture){
+		this.lecture = lecture;
+		lecture.getLectureTags().add(this);
+	}
 
+	public void setTag(Tag tag){
+		this.tag = tag;
+		tag.getLectureTags().add(this);
+	}
 }

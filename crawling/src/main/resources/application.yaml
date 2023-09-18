@@ -3,14 +3,15 @@ server:
 
 spring:
   datasource:
-    username: root
-    password: 1234
-    url: jdbc:mariadb://127.0.0.1:3306/kakao
+    username: admin
+    password: adminadmin
+    url: jdbc:mariadb://crawling-server.c4y9vm1irfhh.ap-northeast-2.rds.amazonaws.com:3306/classmoa
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     open-in-view: false
     defer-datasource-initialization: true
-    hibernate.ddl-auto: create
+    hibernate.ddl-auto: update
+    generate-ddl: true
     properties:
       hibernate.format_sql: true
 cloud:
