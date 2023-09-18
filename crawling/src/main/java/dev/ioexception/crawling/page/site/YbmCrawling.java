@@ -1,6 +1,7 @@
 package dev.ioexception.crawling.page.site;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,15 +13,27 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import dev.ioexception.crawling.entity.Lecture;
+import dev.ioexception.crawling.entity.LectureTag;
+import dev.ioexception.crawling.entity.Tag;
+import dev.ioexception.crawling.page.UploadImage;
 import dev.ioexception.crawling.repository.LectureRepository;
+import dev.ioexception.crawling.repository.LectureTagRepository;
+import dev.ioexception.crawling.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class YbmCrawling{
 
 	private final LectureRepository lectureRepository;
+	private final LectureTagRepository lectureTagRepository;
+	private final TagRepository tagRepository;
+	private final UploadImage uploadImage;
+
 	public List<Lecture> getSaleLecture() throws IOException, InterruptedException {
 
 		// 강의를 저장할 리스트
@@ -48,14 +61,16 @@ public class YbmCrawling{
 
 			// /usr/local/bin 폴더안의 chromedirver 파일을 가져온다.
 			WebDriver driver = new ChromeDriver();
-			// url을 chromedrive로 실행한다.
+			// url을 chromedriver로 실행한다.
 			driver.get(url);
 			Thread.sleep(1000);
 
-			// 단과, 패키지, 환급패스 탭 선택하기
+			// 단과, 패키지, 환급패스 탭부분 선택하기
 			WebElement classElement = driver.findElement(By.cssSelector("#content > div.tabmenu.tab-3 > ul"));
 			List<WebElement> classes = classElement.findElements(By.cssSelector("li"));
 			int classcount = classes.size();
+
+			// 카테고리 단과, 패키지를 하나를 선택해서 클릭한다.
 
 			for(int k = 1; k < classcount; k++){
 				// 카테고리 단과, 패키지를 하나를 선택해서 클릭한다.
@@ -71,7 +86,6 @@ public class YbmCrawling{
 				int typeCount = types.size();
 
 
-
 				for (int i = 1; i <= typeCount; i++){
 
 					// 토익, 토스, 오픽 체크박스 클릭
@@ -85,6 +99,10 @@ public class YbmCrawling{
 					WebElement labelElement = selectedCheckbox.findElement(By.xpath("../label"));
 					String labelText = labelElement.getText();
 					System.out.println("선택된 체크박스 텍스트: " + labelText);
+
+					// 태그 저장
+					Tag tag = tagRepository.findByName(labelText)
+						.orElseGet(() -> tagRepository.save(Tag.builder().name(labelText).build()));
 
 					Thread.sleep(1500);
 					// 전체 강의 선택
@@ -125,16 +143,22 @@ public class YbmCrawling{
 									.title(getTitle(li))
 									.instructor(getInstructor(li))
 									.company_name("YBM")
-									.view_count("-1")
 									.ordinary_price(getPrice(li))
 									.sale_price(getSalePrice(li))
 									.sale_percent(getSalePercent(li))
 									.site_link("-1")
 									.image_link(getImage(li))
+									.date(LocalDate.now())
 									.build();
 								lectureList.add(lecture);
 
 								lectureRepository.save(lecture);
+
+								// 강의 태그 중간테이블을 저장한다.
+								LectureTag lectureTag = new LectureTag();
+								lectureTag.setTag(tag);
+								lectureTag.setLecture(lecture);
+								lectureTagRepository.save(lectureTag);
 							}
 						}
 
@@ -151,7 +175,7 @@ public class YbmCrawling{
 
 		return lectureList;
 	}
-	private static String getInstructor(WebElement li) {
+	private String getInstructor(WebElement li) {
 		// 강의 infobox 가져오기
 		WebElement infobox = li.findElement(By.cssSelector("div.infobox"));
 		// 강사 이름을 가져온다.
@@ -172,16 +196,15 @@ public class YbmCrawling{
 
 		return result;
 	}
-	private static String getImage(WebElement li) {
+	private String getImage(WebElement li) throws IOException {
 		// 드라이버에서 이미지 선택 (현재 LI 태그 내에서 선택)
 		WebElement lectureContainer = li.findElement(By.cssSelector("div.ibox > a > span > img"));
 		// 이미지 태그의 src 속성값을 가져옵니다.
 		String srcValue = lectureContainer.getAttribute("src");
 
-
-		return srcValue;
+		return uploadImage.uploadFromUrlToS3(srcValue, "ybm", getLectureId(li));
 	}
-	public static String getTitle(WebElement li){
+	public  String getTitle(WebElement li){
 		// 강의 infobox 가져오기
 		WebElement infobox = li.findElement(By.cssSelector("div.infobox"));
 		// 강의 제목을 가져온다.
@@ -189,7 +212,7 @@ public class YbmCrawling{
 
 		return title;
 	}
-	public static String getLectureId(WebElement li){
+	public  String getLectureId(WebElement li){
 		// 강의 pricebox 선택하기
 		WebElement pricebox = li.findElement(By.cssSelector("div.price > div.scroll-box > ul"));
 		// 강의 id 가져오기
@@ -198,14 +221,34 @@ public class YbmCrawling{
 		lecture_id = lecture_id.substring(0, indexOfPipe);
 		return "ybm" + lecture_id;
 	}
-	public static String getPrice(WebElement li){
+	public int getPrice(WebElement li){
 		// 강의 pricebox 선택하기
 		WebElement pricebox = li.findElement(By.cssSelector("div.price > div.scroll-box > ul"));
 		// 강의 원가 가져오기
 		String price = pricebox.findElement(By.cssSelector("li:nth-child(1) > span > span")).getText();
-		return price;
+		String numericPart = price.replaceAll("[^0-9]", "");
+		int priceInt = Integer.parseInt(numericPart);
+		return priceInt;
 	}
-	public static String getSalePercent(WebElement li){
+	public int getSalePrice(WebElement li){
+		// 강의 pricebox 선택하기
+		WebElement pricebox = li.findElement(By.cssSelector("div.price > div.scroll-box > ul"));
+
+		String sale_price = "0";
+		int sale_price_int = 0;
+
+		// 강의 할인가 가져오기
+		List<WebElement> salePriceElements = pricebox.findElements(By.cssSelector("li:nth-child(2) > span.stxt-1 > span.stxt-ch"));
+		if (!salePriceElements.isEmpty()) {
+			sale_price = salePriceElements.get(0).getText();
+			String numericPart = sale_price.replaceAll("[^0-9]", "");
+			sale_price_int = Integer.parseInt(numericPart);
+		} else {
+			sale_price_int = getPrice(li);
+		}
+		return sale_price_int;
+	}
+	public  String getSalePercent(WebElement li){
 		// 강의 pricebox 선택하기
 		WebElement pricebox = li.findElement(By.cssSelector("div.price > div.scroll-box > ul"));
 
@@ -218,20 +261,5 @@ public class YbmCrawling{
 			sale_percent = sale_percent.substring(0, 3);
 		}
 		return sale_percent;
-	}
-	public static String getSalePrice(WebElement li){
-		// 강의 pricebox 선택하기
-		WebElement pricebox = li.findElement(By.cssSelector("div.price > div.scroll-box > ul"));
-
-		String sale_price = "0";
-
-		// 강의 할인가 가져오기
-		List<WebElement> salePriceElements = pricebox.findElements(By.cssSelector("li:nth-child(2) > span.stxt-1 > span.stxt-ch"));
-		if (!salePriceElements.isEmpty()) {
-			sale_price = salePriceElements.get(0).getText();
-		} else {
-			sale_price = getPrice(li);
-		}
-		return sale_price;
 	}
 }
