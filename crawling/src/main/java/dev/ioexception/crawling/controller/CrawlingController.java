@@ -14,12 +14,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class CrawlingController {
     private final CrawlingService crawlingService;
 
-    @GetMapping("/")
-    public String craw(Model model) throws IOException {
-        List<Lecture> lectureList = crawlingService.getInflearn();
+    @GetMapping("/ybm")
+    public String craw(Model model) throws IOException, InterruptedException {
+        List<Lecture> lectureList = crawlingService.getYbm();
 
         model.addAttribute("lecture", lectureList);
         return "lecture";
     }
+    @GetMapping("/artandstudy")
+    public String crawArtandStudy(Model model) throws IOException, InterruptedException {
+        List<Lecture> lectureList = crawlingService.getArtandStudy();
 
+        model.addAttribute("lecture", lectureList);
+        return "lecture";
+    }
 }

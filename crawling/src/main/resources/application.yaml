@@ -3,14 +3,30 @@ server:
 
 spring:
   datasource:
-    username: phc
-    password: 1394
-    url: jdbc:mariadb://127.0.0.1:3306/kakao
+    username: admin
+    password: adminadmin
+    url: jdbc:mariadb://crawling-server.c4y9vm1irfhh.ap-northeast-2.rds.amazonaws.com:3306/classmoa
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     open-in-view: false
     defer-datasource-initialization: true
-    hibernate.ddl-auto: none
+    hibernate.ddl-auto: update
+    generate-ddl: true
     properties:
       hibernate.format_sql: true
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIARIZNV6JYGNGN2CZH # IAM 사용자 엑세스 키
+      secretKey: 67CUpdBvEYNRhF4C3zW1pZ7C8GfUuy0DdRE0zn7L # IAM 사용자 비밀 엑세스 키
+    s3:
+      bucket: classmoaimage # 버킷명
+    region:
+      static: ap-northeast-2 # 리전
+    stack:
+      auto: false # Spring Cloud는 환경 또는 스택을 기반으로 이를 자동으로 감지
+
+logging:
+  level:
+    web: debug
 #  sql.init.mode: always
