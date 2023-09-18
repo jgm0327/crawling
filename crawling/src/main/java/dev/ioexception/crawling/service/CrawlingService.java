@@ -1,23 +1,31 @@
 package dev.ioexception.crawling.service;
 
 import dev.ioexception.crawling.entity.Lecture;
+
+import dev.ioexception.crawling.page.site.goormCrawlingddd;
+import dev.ioexception.crawling.page.site.megaCrawlingddd;
 import dev.ioexception.crawling.page.site.ArtandStudyCrawling;
 import dev.ioexception.crawling.page.site.YbmCrawling;
-import lombok.RequiredArgsConstructor;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class CrawlingService {
-
+    private final megaCrawling megaCrawling;
+    private final goormCrawling goormCrawling;
     private final YbmCrawling ybmCrawling;
     private final ArtandStudyCrawling artandStudyCrawling;
-    private final YbmMultiCrawling ybmMultiCrawling;
+
+    public List<Lecture> getMega() throws IOException {
+
+        return megaCrawling.getSaleLecture();
+    }
 
     public List<Lecture> getYbm() throws IOException, InterruptedException {
 
@@ -27,8 +35,9 @@ public class CrawlingService {
 
         return artandStudyCrawling.getSaleLecture();
     }
-    public void getYbmLectures() throws IOException, InterruptedException {
 
-        ybmMultiCrawling.crawlAllSites();
+    public List<Lecture> getGoorm() throws IOException {
+
+        return goormCrawling.getSaleLecture();
     }
 }

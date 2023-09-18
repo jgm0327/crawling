@@ -16,25 +16,25 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class LectureTag {
+    
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long lectag_id;
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long lectag_id;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "lecture_id")
+    private Lecture lecture;
 
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "lecture_id")
-	private Lecture lecture;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "tag_id")
+    private Tag tag;
 
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "tag_id")
-	private Tag tag;
+    public void setLecture(Lecture lecture){
+        this.lecture = lecture;
+        lecture.getLectureTags().add(this);
+    }
 
-	public void setLecture(Lecture lecture){
-		this.lecture = lecture;
-		lecture.getLectureTags().add(this);
-	}
-
-	public void setTag(Tag tag){
-		this.tag = tag;
-		tag.getLectureTags().add(this);
-	}
+    public void setTag(Tag tag){
+        this.tag = tag;
+        tag.getLectureTags().add(this);
+    }
 }

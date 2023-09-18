@@ -40,7 +40,7 @@ public class Lecture {
     @Builder
 
     public Lecture(String lecture_Id, String title, String instructor, String company_name, int ordinary_price,
-        int sale_price, String sale_percent, String image_link, String site_link, LocalDate date) {
+                   int sale_price, String sale_percent, String image_link, String site_link, LocalDate date) {
         this.lecture_Id = lecture_Id;
         this.title = title;
         this.instructor = instructor;
