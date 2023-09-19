@@ -20,15 +20,15 @@ import lombok.Getter;
 public class Lecture {
 
     @Id
-    private String lecture_Id;
+    private String lectureId;
     private String title;
     private String instructor;
-    private String company_name;
-    private int ordinary_price;
-    private int sale_price;
-    private String sale_percent;
-    private String image_link;
-    private String site_link;
+    private String companyName;
+    private int ordinaryPrice;
+    private int salePrice;
+    private String salePercent;
+    private String imageLink;
+    private String siteLink;
     private LocalDate date;
 
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -39,17 +39,16 @@ public class Lecture {
     }
     @Builder
 
-    public Lecture(String lecture_Id, String title, String instructor, String company_name, int ordinary_price,
-                   int sale_price, String sale_percent, String image_link, String site_link, LocalDate date) {
-        this.lecture_Id = lecture_Id;
+    public Lecture(String lectureId, String title, String instructor, String companyName, int ordinaryPrice, int salePrice, String salePercent, String imageLink, String siteLink, LocalDate date) {
+        this.lectureId = lectureId;
         this.title = title;
         this.instructor = instructor;
-        this.company_name = company_name;
-        this.ordinary_price = ordinary_price;
-        this.sale_price = sale_price;
-        this.sale_percent = sale_percent;
-        this.image_link = image_link;
-        this.site_link = site_link;
+        this.companyName = companyName;
+        this.ordinaryPrice = ordinaryPrice;
+        this.salePrice = salePrice;
+        this.salePercent = salePercent;
+        this.imageLink = imageLink;
+        this.siteLink = siteLink;
         this.date = date;
     }
 }

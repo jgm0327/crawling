@@ -24,7 +24,7 @@ import dev.ioexception.crawling.repository.LectureRepository;
 @Component
 @RequiredArgsConstructor
 @Transactional
-public class MegaCrawling{
+public class MegaCrawling {
     private final LectureRepository lectureRepository;
     private final TagRepository tagRepository;
     private final LectureTagRepository lectureTagRepository;
@@ -44,23 +44,23 @@ public class MegaCrawling{
             for (Element content : contents) {
 
                 Lecture lecture = Lecture.builder()
-                        .lecture_Id(getId(content))
-                        .image_link(getImage(content))
-                        .sale_percent(getSalePercent(content))
-                        .title(getTitle(content))
-                        .company_name("mega")
-                        .site_link(getUrl(content))
-                        .instructor(getInstructor(content))
-                        .ordinary_price(getPrice(content))
-                        .sale_price(getSalePrice(content))
-                        .date(LocalDate.now())
-                        .build();
+                    .lectureId(getId(content))
+                    .imageLink(getImage(content))
+                    .salePercent(getSalePercent(content))
+                    .title(getTitle(content))
+                    .companyName("mega")
+                    .siteLink(getUrl(content))
+                    .instructor(getInstructor(content))
+                    .ordinaryPrice(getPrice(content))
+                    .salePrice(getSalePrice(content))
+                    .date(LocalDate.now())
+                    .build();
                 lectureList.add(lecture);
                 lectureRepository.save(lecture);
 
                 // 태그 저장
                 Tag tag = tagRepository.findByName(getTagName(content))
-                        .orElseGet(() -> tagRepository.save(Tag.builder().name(getTagName(content)).build()));
+                    .orElseGet(() -> tagRepository.save(Tag.builder().name(getTagName(content)).build()));
 
                 // 강의 태그 중간 테이블 저장
                 LectureTag lectureTag = new LectureTag();

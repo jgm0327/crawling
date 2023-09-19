@@ -43,7 +43,7 @@ public class GoormCrawling {
 
             // 태그 저장
             Tag tag = tagRepository.findByName(tagName)
-                    .orElseGet(() -> tagRepository.save(Tag.builder().name(tagName).build()));
+                .orElseGet(() -> tagRepository.save(Tag.builder().name(tagName).build()));
 
 
             for (int i = 1; i <= lastPage; i++) {
@@ -52,17 +52,17 @@ public class GoormCrawling {
 
                 for (Element content : contents) {
                     Lecture lecture = Lecture.builder()
-                            .lecture_Id(getId(content))
-                            .image_link(getImage(content))
-                            .sale_percent(getSalePercent(content))
-                            .title(getTitle(content))
-                            .company_name("goorm")
-                            .site_link(getUrl(content))
-                            .instructor(getInstructor(content))
-                            .ordinary_price(getPrice(content))
-                            .sale_price(getSalePrice(content))
-                            .date(LocalDate.now())
-                            .build();
+                        .lectureId(getId(content))
+                        .imageLink(getImage(content))
+                        .salePercent(getSalePercent(content))
+                        .title(getTitle(content))
+                        .companyName("goorm")
+                        .siteLink(getUrl(content))
+                        .instructor(getInstructor(content))
+                        .ordinaryPrice(getPrice(content))
+                        .salePrice(getSalePrice(content))
+                        .date(LocalDate.now())
+                        .build();
                     lectureList.add(lecture);
                     lectureRepository.save(lecture);
 

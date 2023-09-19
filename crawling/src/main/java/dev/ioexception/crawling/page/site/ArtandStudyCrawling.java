@@ -66,15 +66,15 @@ public class ArtandStudyCrawling {
 					"#content > div.wrap > div > div > ul > li:nth-child(4) > ul > a");
 				for (Element content : contents) {
 					Lecture lecture = Lecture.builder()
-						.lecture_Id(getLectureId(content))
+						.lectureId(getLectureId(content))
 						.title(getTitle(content))
 						.instructor(getInstructor(content))
-						.company_name("ArtandStudy")
-						.ordinary_price(getPrice(content))
-						.sale_price(getSalePrice(content))
-						.sale_percent(getSalePercent(content))
-						.site_link(getUrl(content))
-						.image_link(getImage(content))
+						.companyName("ArtandStudy")
+						.ordinaryPrice(getPrice(content))
+						.salePrice(getSalePrice(content))
+						.salePercent(getSalePercent(content))
+						.siteLink(getUrl(content))
+						.imageLink(getImage(content))
 						.date(LocalDate.now())
 						.build();
 					// lectureList.add(lecture);

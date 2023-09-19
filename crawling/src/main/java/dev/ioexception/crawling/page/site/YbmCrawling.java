@@ -139,15 +139,15 @@ public class YbmCrawling{
 								}
 
 								Lecture lecture = Lecture.builder()
-									.lecture_Id(getLectureId(li))
+									.lectureId(getLectureId(li))
 									.title(getTitle(li))
 									.instructor(getInstructor(li))
-									.company_name("YBM")
-									.ordinary_price(getPrice(li))
-									.sale_price(getSalePrice(li))
-									.sale_percent(getSalePercent(li))
-									.site_link("-1")
-									.image_link(getImage(li))
+									.companyName("YBM")
+									.ordinaryPrice(getPrice(li))
+									.salePrice(getSalePrice(li))
+									.salePercent(getSalePercent(li))
+									.siteLink("-1")
+									.imageLink(getImage(li))
 									.date(LocalDate.now())
 									.build();
 								lectureList.add(lecture);
