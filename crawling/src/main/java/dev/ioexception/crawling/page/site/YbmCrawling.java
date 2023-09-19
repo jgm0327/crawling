@@ -46,6 +46,7 @@ public class YbmCrawling{
 		chromeOptions.addArguments("--no-sandbox");
 		chromeOptions.addArguments("--disable-dev-shm-usage");
 		chromeOptions.addArguments("--disable-gpu");
+		chromeOptions.addArguments("headless");
 		chromeOptions.setCapability("ignoreProtectedModeSettings", true);
 
 		// 토익, 영어, 일본어, 중국어 강의 가져오는 리스트페이지
@@ -146,7 +147,7 @@ public class YbmCrawling{
 									.ordinaryPrice(getPrice(li))
 									.salePrice(getSalePrice(li))
 									.salePercent(getSalePercent(li))
-									.siteLink("-1")
+									.siteLink("https://toeic.ybmclass.com/toeic/toeic_main.asp")
 									.imageLink(getImage(li))
 									.date(LocalDate.now())
 									.build();
