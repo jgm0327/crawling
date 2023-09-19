@@ -24,7 +24,7 @@ import dev.ioexception.crawling.repository.LectureRepository;
 @Component
 @RequiredArgsConstructor
 @Transactional
-public class GoormCrawling implements CrawlingSite {
+public class GoormCrawling {
     private final LectureRepository lectureRepository;
     private final TagRepository tagRepository;
     private final LectureTagRepository lectureTagRepository;

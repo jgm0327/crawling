@@ -24,7 +24,7 @@ import dev.ioexception.crawling.repository.LectureRepository;
 @Component
 @RequiredArgsConstructor
 @Transactional
-public class MegaCrawling implements CrawlingSite {
+public class MegaCrawling{
     private final LectureRepository lectureRepository;
     private final TagRepository tagRepository;
     private final LectureTagRepository lectureTagRepository;
