@@ -16,27 +16,27 @@ public class CrawlingController {
     private final CrawlingService crawlingService;
 
     @GetMapping("/mega")
-    public String megacraw(Model model) throws IOException {
+    public String crawlMega(Model model) throws IOException {
         List<Lecture> lectureList = crawlingService.getMega();
         model.addAttribute("lecture", lectureList);
         return "lecture";
     }
 
     @GetMapping("/ybm")
-    public String craw(Model model) throws IOException, InterruptedException {
+    public String crawlYbm(Model model) throws IOException, InterruptedException {
         List<Lecture> lectureList = crawlingService.getYbm();
         model.addAttribute("lecture", lectureList);
         return "lecture";
     }
     @GetMapping("/artandstudy")
-    public String crawArtandStudy(Model model) throws IOException, InterruptedException {
+    public String crawlArtandStudy(Model model) throws IOException, InterruptedException {
         List<Lecture> lectureList = crawlingService.getArtandStudy();
         
         model.addAttribute("lecture", lectureList);
         return "lecture";
     }
     @GetMapping("/goorm")
-    public String goormcraw(Model model) throws IOException {
+    public String crawlGoorm(Model model) throws IOException {
         List<Lecture> lectureList = crawlingService.getGoorm();
 
         model.addAttribute("lecture", lectureList);
