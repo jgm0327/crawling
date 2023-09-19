@@ -54,5 +54,11 @@ public class CrawlingController {
 		model.addAttribute("lecture", lectureList);
 		return "lecture";
 	}
+
+
+    @GetMapping("/inflearn")
+    public void crawlInflearn() throws IOException {
+        crawlingService.getInflearn();
+    }
 }
 
