@@ -43,5 +43,10 @@ public class CrawlingController {
         return "lecture";
     }
 
+    @GetMapping("/inflearn")
+    public void crawlInflearn() throws IOException {
+        crawlingService.getInflearn();
+    }
+
 }
 
