@@ -2,10 +2,11 @@ package dev.ioexception.crawling.service;
 
 import dev.ioexception.crawling.entity.Lecture;
 
-import dev.ioexception.crawling.page.site.goormCrawlingddd;
-import dev.ioexception.crawling.page.site.megaCrawlingddd;
 import dev.ioexception.crawling.page.site.ArtandStudyCrawling;
+import dev.ioexception.crawling.page.site.GoormCrawling;
+import dev.ioexception.crawling.page.site.MegaCrawling;
 import dev.ioexception.crawling.page.site.YbmCrawling;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class CrawlingService {
-    private final megaCrawling megaCrawling;
-    private final goormCrawling goormCrawling;
+    private final MegaCrawling megaCrawling;
+    private final GoormCrawling goormCrawling;
     private final YbmCrawling ybmCrawling;
     private final ArtandStudyCrawling artandStudyCrawling;
 
