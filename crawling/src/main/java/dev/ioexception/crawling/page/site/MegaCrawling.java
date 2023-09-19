@@ -75,14 +75,14 @@ public class MegaCrawling {
     private String getId(Element content) {
         String url = content.select("a:nth-child(1)").attr("href");
         String[] parts = url.split("/");
-        return parts[2];
+        return "mega"+parts[2];
     }
 
     private String getImage(Element content) throws IOException {
         String imageUrl = content.select("a > div:nth-child(1) > img").attr("src");
         String image = uploadImage.uploadFromUrlToS3(imageUrl, "mega", getId(content));
 
-        return imageUrl;
+        return image;
     }
 
     private String getSalePercent(Element content) throws IOException {

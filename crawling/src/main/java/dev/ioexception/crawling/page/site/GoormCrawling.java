@@ -80,14 +80,14 @@ public class GoormCrawling {
     private String getId(Element content) {
         String url = content.select("a._1xnzzp._1MfH_h").attr("href");
         String[] parts = url.split("/");
-        return parts[2];
+        return "goorm"+parts[2];
     }
 
     private String getImage(Element content) throws IOException {
         String imageUrl = content.select("div._31ylS5 > img").attr("data-src");
         String image = uploadImage.uploadFromUrlToS3(imageUrl, "goorm", getId(content));
 
-        return imageUrl;
+        return image;
     }
 
     private String getSalePercent(Element content) throws IOException {
