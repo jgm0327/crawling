@@ -16,16 +16,16 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class LectureTag {
-    
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long lectag_id;
+    private Long lectagId;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "lecture_id")
+    @JoinColumn(name = "lectureId")
     private Lecture lecture;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "tag_id")
+    @JoinColumn(name = "tagId")
     private Tag tag;
 
     public void setLecture(Lecture lecture){
