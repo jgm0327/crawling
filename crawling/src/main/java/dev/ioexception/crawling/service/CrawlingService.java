@@ -1,18 +1,16 @@
 package dev.ioexception.crawling.service;
 
 import dev.ioexception.crawling.entity.Lecture;
-
 import dev.ioexception.crawling.page.site.ArtandStudyCrawling;
 import dev.ioexception.crawling.page.site.GoormCrawling;
+import dev.ioexception.crawling.page.site.InflearnCrawling;
 import dev.ioexception.crawling.page.site.MegaCrawling;
 import dev.ioexception.crawling.page.site.YbmCrawling;
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.io.IOException;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +20,7 @@ public class CrawlingService {
     private final GoormCrawling goormCrawling;
     private final YbmCrawling ybmCrawling;
     private final ArtandStudyCrawling artandStudyCrawling;
+    private final InflearnCrawling inflearnCrawling;
 
     public List<Lecture> getMega() throws IOException {
 
@@ -40,5 +39,9 @@ public class CrawlingService {
     public List<Lecture> getGoorm() throws IOException {
 
         return goormCrawling.getSaleLecture();
+    }
+
+    public void getInflearn() {
+        inflearnCrawling.getLecture();
     }
 }
