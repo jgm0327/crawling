@@ -17,35 +17,36 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 public class CrawlingService {
-	private final MegaCrawling megaCrawling;
-	private final GoormCrawling goormCrawling;
-	private final YbmCrawling ybmCrawling;
-	private final ArtandStudyCrawling artandStudyCrawling;
-	private final ClassUCrawling classUCrawling;
-  private final InflearnCrawling inflearnCrawling;
-  
-	public List<Lecture> getMega() throws IOException {
-		return megaCrawling.getSaleLecture();
-	}
+    private final MegaCrawling megaCrawling;
+    private final GoormCrawling goormCrawling;
+    private final YbmCrawling ybmCrawling;
+    private final ArtandStudyCrawling artandStudyCrawling;
+    private final ClassUCrawling classUCrawling;
+    private final InflearnCrawling inflearnCrawling;
 
-	public List<Lecture> getYbm() throws IOException, InterruptedException {
+    public void getMega() throws IOException {
+        megaCrawling.getSaleLecture();
+    }
 
-		return ybmCrawling.getSaleLecture();
-	}
+    public void getYbm() throws IOException, InterruptedException {
 
-	public List<Lecture> getArtandStudy() throws IOException, InterruptedException {
+        ybmCrawling.getSaleLecture();
+    }
 
-		return artandStudyCrawling.getSaleLecture();
-	}
+    public void getArtandStudy() throws IOException, InterruptedException {
 
-	public List<Lecture> getGoorm() throws IOException {
+        artandStudyCrawling.getSaleLecture();
+    }
 
-		return goormCrawling.getSaleLecture();
-	}
+    public void getGoorm() throws IOException {
 
-	public List<Lecture> getClassu() throws IOException {
-		return classUCrawling.process();
-	}
+        goormCrawling.getSaleLecture();
+    }
+
+    public void getClassu() throws IOException {
+        classUCrawling.process();
+    }
+
     public void getInflearn() {
         inflearnCrawling.getLecture();
     }

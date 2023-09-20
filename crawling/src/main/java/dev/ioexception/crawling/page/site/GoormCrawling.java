@@ -1,25 +1,21 @@
 package dev.ioexception.crawling.page.site;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
+import dev.ioexception.crawling.entity.Lecture;
 import dev.ioexception.crawling.entity.LectureTag;
 import dev.ioexception.crawling.entity.Tag;
 import dev.ioexception.crawling.page.UploadImage;
+import dev.ioexception.crawling.repository.LectureRepository;
 import dev.ioexception.crawling.repository.LectureTagRepository;
 import dev.ioexception.crawling.repository.TagRepository;
 import jakarta.transaction.Transactional;
+import java.io.IOException;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
-
-import dev.ioexception.crawling.entity.Lecture;
-import dev.ioexception.crawling.repository.LectureRepository;
 
 @Component
 @RequiredArgsConstructor
@@ -31,8 +27,7 @@ public class GoormCrawling {
     private final UploadImage uploadImage;
 
 
-    public List<Lecture> getSaleLecture() throws IOException {
-        List<Lecture> lectureList = new ArrayList<>();
+    public void getSaleLecture() throws IOException {
         Document document = Jsoup.connect("https://edu.goorm.io/category/programming").get();
 
         for(int j = 2; j <= 17; j++) {
@@ -63,31 +58,31 @@ public class GoormCrawling {
                         .salePrice(getSalePrice(content))
                         .date(LocalDate.now())
                         .build();
-                    lectureList.add(lecture);
+
                     lectureRepository.save(lecture);
 
                     // 강의 태그 중간 테이블 저장
                     LectureTag lectureTag = new LectureTag();
                     lectureTag.setTag(tag);
                     lectureTag.setLecture(lecture);
+
                     lectureTagRepository.save(lectureTag);
                 }
             }
         }
-        return lectureList;
     }
 
     private String getId(Element content) {
         String url = content.select("a._1xnzzp._1MfH_h").attr("href");
         String[] parts = url.split("/");
+
         return "goorm"+parts[2];
     }
 
     private String getImage(Element content) throws IOException {
         String imageUrl = content.select("div._31ylS5 > img").attr("data-src");
-        String image = uploadImage.uploadFromUrlToS3(imageUrl, "goorm", getId(content));
 
-        return image;
+        return uploadImage.uploadFromUrlToS3(imageUrl, "goorm", getId(content));
     }
 
     private String getSalePercent(Element content) throws IOException {

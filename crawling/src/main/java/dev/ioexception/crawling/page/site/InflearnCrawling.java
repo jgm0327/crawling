@@ -9,9 +9,7 @@ import dev.ioexception.crawling.repository.LectureTagRepository;
 import dev.ioexception.crawling.repository.TagRepository;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Optional;
 import java.util.StringTokenizer;
-import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -23,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Component
+@Transactional
 @RequiredArgsConstructor
 public class InflearnCrawling {
     private final LectureTagRepository lectureTagRepository;
@@ -30,8 +29,6 @@ public class InflearnCrawling {
     private final TagRepository tagRepository;
     private final UploadImage uploadImage;
 
-    private static final int NUM_THREADS = 10; // 동시에 실행할 스레드 수
-    private static final int PAGE_SIZE = 10; // 한 번에 처리할 페이지 수
     private static final String SITE_NAME = "inflearn";
 
     public void getLecture() {
@@ -47,78 +44,59 @@ public class InflearnCrawling {
         Elements page = document.select("footer nav div.pagination_container ul.pagination-list li:last-child");
         int lastPage = Integer.parseInt(page.select("a.pagination-link").text());
 
-//        ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREADS);
-        AtomicInteger currentPage = new AtomicInteger(1);
 
-        while (currentPage.get() <= lastPage) {
-//            List<Runnable> tasks = new ArrayList<>();
-
-            for (int i = 0; i < PAGE_SIZE && currentPage.get() <= lastPage; i++) {
-                final int pageToCrawl = currentPage.getAndIncrement();
-//                Thread.sleep(500);
-//                tasks.add(() -> crawlPage(pageToCrawl));
-                crawlPage(pageToCrawl);
-            }
-
-//            for (Runnable task : tasks) {
-//                executorService.submit(task);
-//            }
+        for (int currentPage = 1; currentPage <= lastPage; currentPage++) {
+            crawlPage(currentPage);
         }
-
-//        executorService.shutdown();
-//        executorService.awaitTermination(20, TimeUnit.SECONDS);
-
     }
 
-    @Transactional
     public void crawlPage(int page) {
         try {
-//            List<Lecture> lectureList = new ArrayList<>();
             Document documentPage = Jsoup.connect(
                     "https://www.inflearn.com/courses?order=seq&types=ONLINE&page=" + page).get();
             System.out.println("Crawling page: " + page);
 
             Elements contents = documentPage.select(
                     "main.courses_main div.courses_container div.courses_card_list_body div.is-3-widescreen div.course_card_item");
-            System.out.println(contents.size());
 
-            for (Element content : contents) {
-                String lectureId = getCourseNumber(content);
-                String imageLink = uploadImage.uploadFromUrlToS3(getImage(content), SITE_NAME, lectureId);
-                System.out.println(imageLink);
-
-                Lecture lecture = Lecture.builder()
-                        .lectureId(lectureId)
-                        .imageLink(imageLink)
-                        .salePercent(getSalePercent(content))
-                        .title(getTitle(content))
-                        .siteLink(getUrl(content))
-                        .instructor(getInstructor(content))
-                        .ordinaryPrice(getPrice(content))
-                        .salePrice(getSalePrice(content))
-                        .companyName(SITE_NAME)
-                        .date(LocalDate.now())
-                        .build();
-                System.out.println(lectureRepository.save(lecture));
-
-                StringTokenizer tags = new StringTokenizer(getTag(content).replaceAll("·", ","), ",");
-
-                while (tags.hasMoreTokens()) {
-                    String tag = tags.nextToken().trim();
-                    Tag tagId = existTag(tag);
-
-                    saveLecTag(lecture, tagId);
-                }
-            }
-
-//            lectureRepository.saveAll(lectureList);
+            saveLecture(contents);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    //    @Cacheable(value = "tag", key = "#tag", cacheManager = "cacheManager")
+    private void saveLecture(Elements contents) throws IOException {
+        for (Element content : contents) {
+            String lectureId = getCourseNumber(content);
+            String imageLink = uploadImage.uploadFromUrlToS3(getImage(content), SITE_NAME, lectureId);
+
+            Lecture lecture = Lecture.builder()
+                    .lectureId(lectureId)
+                    .imageLink(imageLink)
+                    .salePercent(getSalePercent(content))
+                    .title(getTitle(content))
+                    .siteLink(getUrl(content))
+                    .instructor(getInstructor(content))
+                    .ordinaryPrice(getPrice(content))
+                    .salePrice(getSalePrice(content))
+                    .companyName(SITE_NAME)
+                    .date(LocalDate.now())
+                    .build();
+
+            lectureRepository.save(lecture);
+
+            StringTokenizer tags = new StringTokenizer(getTag(content).replaceAll("·", ","), ",");
+
+            while (tags.hasMoreTokens()) {
+                String tag = tags.nextToken().trim();
+                Tag tagId = existTag(tag);
+
+                saveLecTag(lecture, tagId);
+            }
+        }
+    }
+
     public Tag existTag(String tag) {
         return tagRepository.findByName(tag)
                 .orElseGet(() -> tagRepository.save(Tag.builder().name(tag).build()));
@@ -161,9 +139,11 @@ public class InflearnCrawling {
     private int getPrice(Element content) {
         if (content.select("div.card-content div.price span.pay_price").text().isBlank()) {
             String price = content.select("div.card-content div.price").text().replaceAll("[,\\₩]", "").trim();
+
             if (price.equals("무료")) {
                 return 0;
             }
+
             return Integer.parseInt(price);
         }
         return Integer.parseInt(
@@ -175,6 +155,7 @@ public class InflearnCrawling {
         if (salePrice.isBlank()) {
             return getPrice(content);
         }
+        
         return Integer.parseInt(salePrice.replaceAll("[,\\₩]", "").trim());
     }
 
