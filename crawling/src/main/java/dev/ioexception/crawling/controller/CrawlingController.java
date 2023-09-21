@@ -16,48 +16,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CrawlingController {
 	private final CrawlingService crawlingService;
-	private final GoormCrawling goormCrawling;
 
-	@GetMapping("/mega")
-	public String megacraw(Model model) throws IOException {
-		List<Lecture> lectureList = crawlingService.getMega();
-		model.addAttribute("lecture", lectureList);
-		return "lecture";
+	@GetMapping("/")
+	public void crawling() throws IOException, InterruptedException{
+//		crawlingService.getMega();
+//		crawlingService.getClassu();
+//		crawlingService.getGoorm();
+//		crawlingService.getYbm();
+		crawlingService.getArtandStudy();
+		crawlingService.getInflearn();
 	}
-
-	@GetMapping("/ybm")
-	public String craw(Model model) throws IOException, InterruptedException {
-		List<Lecture> lectureList = crawlingService.getYbm();
-		model.addAttribute("lecture", lectureList);
-		return "lecture";
-	}
-
-	@GetMapping("/artandstudy")
-	public String crawArtandStudy(Model model) throws IOException, InterruptedException {
-		List<Lecture> lectureList = crawlingService.getArtandStudy();
-
-		model.addAttribute("lecture", lectureList);
-		return "lecture";
-	}
-
-	@GetMapping("/goorm")
-	public String goormcraw(Model model) throws IOException {
-		List<Lecture> lectureList = crawlingService.getGoorm();
-
-		model.addAttribute("lecture", lectureList);
-		return "lecture";
-	}
-
-	@GetMapping("/classu")
-	public String crawClassu(Model model) throws IOException {
-		crawlingService.getClassu();
-		return "lecture";
-	}
-
-
-    @GetMapping("/inflearn")
-    public void crawlInflearn() throws IOException {
-        crawlingService.getInflearn();
-    }
 }
 
