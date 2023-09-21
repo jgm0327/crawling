@@ -2,6 +2,8 @@ package dev.ioexception.crawling.entity;
 
 import static jakarta.persistence.FetchType.*;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,6 +29,7 @@ public class LectureTag {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "tagId")
     private Tag tag;
+
 
     public void setLecture(Lecture lecture){
         this.lecture = lecture;

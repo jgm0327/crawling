@@ -46,7 +46,7 @@ public class CrawlingService {
     public void getClassu() throws IOException {
         classUCrawling.process();
     }
-
+  
     public void getInflearn() {
         inflearnCrawling.getLecture();
     }
