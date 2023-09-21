@@ -30,8 +30,7 @@ public class MegaCrawling {
     private final LectureTagRepository lectureTagRepository;
     private final UploadImage uploadImage;
 
-    public List<Lecture> getSaleLecture() throws IOException {
-        List<Lecture> lectureList = new ArrayList<>();
+    public void getSaleLecture() throws IOException {
         Document document = Jsoup.connect("https://megastudyacademy.co.kr/lecture_list").get();
 
         String page = document.select("body > div.lecture > div > div.lecture_listView > div.paging > ul > li > a.last").attr("href").replaceAll("[^0-9]","");
@@ -55,7 +54,6 @@ public class MegaCrawling {
                     .salePrice(getSalePrice(content))
                     .date(LocalDate.now())
                     .build();
-                lectureList.add(lecture);
                 lectureRepository.save(lecture);
 
                 // 태그 저장
@@ -69,7 +67,6 @@ public class MegaCrawling {
                 lectureTagRepository.save(lectureTag);
             }
         }
-        return lectureList;
     }
 
     private String getId(Element content) {
