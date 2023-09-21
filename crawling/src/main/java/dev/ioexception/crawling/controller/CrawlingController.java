@@ -50,8 +50,7 @@ public class CrawlingController {
 
 	@GetMapping("/classu")
 	public String crawClassu(Model model) throws IOException {
-		List<Lecture> lectureList = crawlingService.getClassu();
-		model.addAttribute("lecture", lectureList);
+		crawlingService.getClassu();
 		return "lecture";
 	}
 

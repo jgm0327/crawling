@@ -43,8 +43,8 @@ public class CrawlingService {
 		return goormCrawling.getSaleLecture();
 	}
 
-	public List<Lecture> getClassu() throws IOException {
-		return classUCrawling.process();
+	public void getClassu() throws IOException {
+		classUCrawling.process();
 	}
     public void getInflearn() {
         inflearnCrawling.getLecture();

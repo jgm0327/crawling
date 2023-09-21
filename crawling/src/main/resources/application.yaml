@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    username: admin
-    password: adminadmin
-    url: jdbc:mariadb://crawling-server.c4y9vm1irfhh.ap-northeast-2.rds.amazonaws.com:3306/classmoa
+    username: ${username} #admin
+    password: ${password} #adminadmin
+    url: ${jdbcURL} #jdbc:mariadb://crawling-server.c4y9vm1irfhh.ap-northeast-2.rds.amazonaws.com:3306/classmoa
     driver-class-name: org.mariadb.jdbc.Driver
 
   #의존성 추가

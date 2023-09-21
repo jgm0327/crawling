@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -16,6 +17,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import dev.ioexception.crawling.entity.Lecture;
 import dev.ioexception.crawling.entity.LectureTag;
@@ -37,7 +39,7 @@ public class ClassUCrawling {
 	private final LectureTagRepository lectureTagRepository;
 	private final UploadImage uploadImage;
 
-	public List<Lecture> process() throws IOException {
+	public void process() throws IOException {
 		System.setProperty("webdriver.chrome.driver",
 			"C:\\Users\\user\\Desktop\\chromedriver-win64\\chromedriver.exe");
 
@@ -58,7 +60,6 @@ public class ClassUCrawling {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		return lectureRepository.findAll();
 	}
 
 	private void categoryMove() throws InterruptedException, IOException {
@@ -75,21 +76,25 @@ public class ClassUCrawling {
 		for (String category : categories) {
 			List<String> subcategories = new ArrayList<>();
 			String url = CLASSU_URL + category;
-			Tag tag = tagRepository.save(new Tag(category));
-			// System.out.println(url);
+			Optional<Tag> tag = tagRepository.findByName(category);
+			if(tag.isEmpty())tag = Optional.of(tagRepository.save(new Tag(category)));
+
 			categoryDriver.get(url);
 			Thread.sleep(1000);
 			List<WebElement> subElements = categoryDriver.findElements(
 				By.cssSelector("#right-side > div > div > section > ul:nth-child(2) > li"));
+
 			for (WebElement webElement : subElements) {
 				subcategories.add(webElement.getText());
 			}
+
 			for (String sub : subcategories) {
 				System.out.println(url + "&subCategoryId=" + sub);
 				categoryDriver.get(url + "&subCategoryId=" + sub);
 				Thread.sleep(1000);
 				Long last_height = (Long)((JavascriptExecutor)categoryDriver).executeScript(
 					"return document.body.scrollHeight");
+
 				while (true) {
 					new Actions(categoryDriver).sendKeys(Keys.END).perform();
 					Thread.sleep(1500);
@@ -99,7 +104,8 @@ public class ClassUCrawling {
 						break;
 					last_height = new_height;
 				}
-				getData(sub, tag);
+
+				getData(sub, tag.get());
 				Thread.sleep(1000);
 			}
 		}
@@ -107,7 +113,8 @@ public class ClassUCrawling {
 
 	private void getData(String sub, Tag tag) throws InterruptedException, IOException {
 		List<Lecture> lectureList = new ArrayList<>();
-		Tag subtag = tagRepository.save(new Tag(sub));
+		Optional<Tag> subtag = tagRepository.findByName(sub);
+		if(subtag.isEmpty())subtag = Optional.of(tagRepository.save(new Tag(sub)));
 		Thread.sleep(1000);
 		List<WebElement> elements = categoryDriver
 			.findElements(
@@ -130,6 +137,7 @@ public class ClassUCrawling {
 				.date(LocalDate.now())
 				.salePercent(getSalePercent(price.get(i)))
 				.build();
+
 			lectureList.add(lecture);
 		}
 
@@ -142,7 +150,7 @@ public class ClassUCrawling {
 
 			LectureTag lectureTag2 = new LectureTag();
 			lectureTag2.setLecture(lec);
-			lectureTag2.setTag(subtag);
+			lectureTag2.setTag(subtag.get());
 			lectureTagRepository.save(lectureTag2);
 		}
 
