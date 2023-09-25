@@ -40,14 +40,17 @@ public class ClassUCrawling {
 	private final UploadImage uploadImage;
 
 	public void process() throws IOException {
-		System.setProperty("webdriver.chrome.driver",
-			"C:\\Users\\user\\Desktop\\chromedriver-win64\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
 
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--disable-popup-blocking");       //팝업안띄움
 		options.addArguments("headless");                       //브라우저 안띄움
 		options.addArguments("--disable-gpu");            //gpu 비활성화
 		options.addArguments("--start-maximized");
+		options.addArguments("--lang=ko");
+		options.addArguments("--no-sandbox");
+		options.addArguments("--disable-dev-shm-usage");
+		options.addArguments("--disable-gpu");
 
 		//        options.addArguments("--blink-settings=imagesEnabled=false"); //이미지 다운 안받음
 
