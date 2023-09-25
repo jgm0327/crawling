@@ -11,15 +11,23 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@Data
+
 @Entity
+@Getter
+@NoArgsConstructor
 public class Lecture {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String lectureId;
     private String title;
     private String instructor;
@@ -34,11 +42,7 @@ public class Lecture {
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LectureTag> lectureTags = new ArrayList<>();
 
-    public Lecture() {
-
-    }
     @Builder
-
     public Lecture(String lectureId, String title, String instructor, String companyName, int ordinaryPrice, int salePrice, String salePercent, String imageLink, String siteLink, LocalDate date) {
         this.lectureId = lectureId;
         this.title = title;
