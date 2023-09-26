@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -61,8 +62,9 @@ public class ArtandStudyCrawling {
                 Elements contents = document.select(
                         "#content > div.wrap > div > div > ul > li:nth-child(4) > ul > a");
                 for (Element content : contents) {
+                    String lectureId = getLectureId(content);
                     Lecture lecture = Lecture.builder()
-                            .lectureId(getLectureId(content))
+                            .lectureId(lectureId)
                             .title(getTitle(content))
                             .instructor(getInstructor(content))
                             .companyName("ArtandStudy")
@@ -74,12 +76,14 @@ public class ArtandStudyCrawling {
                             .date(LocalDate.now())
                             .build();
 
-                    lectureRepository.save(lecture);
+                    Lecture newLecture = lectureRepository
+                        .findLectureByLectureId(lectureId)
+                        .orElseGet(() -> lectureRepository.save(lecture));
 
                     // 강의 태그 중간테이블을 저장한다.
                     LectureTag lectureTag = new LectureTag();
                     lectureTag.setTag(tag);
-                    lectureTag.setLecture(lecture);
+                    lectureTag.setLecture(newLecture);
                     lectureTagRepository.save(lectureTag);
                 }
             }

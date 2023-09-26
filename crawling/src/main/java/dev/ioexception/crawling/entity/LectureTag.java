@@ -30,7 +30,6 @@ public class LectureTag {
     @JoinColumn(name = "tagId")
     private Tag tag;
 
-
     public void setLecture(Lecture lecture){
         this.lecture = lecture;
         lecture.getLectureTags().add(this);

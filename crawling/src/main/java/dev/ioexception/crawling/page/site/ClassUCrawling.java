@@ -30,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class ClassUCrawling {
 	private WebDriver categoryDriver;
 	private final String CLASSU_URL = "https://www.classu.co.kr/new/category?categoryId=";
@@ -40,7 +41,8 @@ public class ClassUCrawling {
 	private final UploadImage uploadImage;
 
 	public void process() throws IOException {
-		System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
+		//System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\user\\Desktop\\chromedriver-win64\\chromedriver.exe");
 
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--disable-popup-blocking");       //팝업안띄움
@@ -48,7 +50,7 @@ public class ClassUCrawling {
 		options.addArguments("--disable-gpu");            //gpu 비활성화
 		options.addArguments("--start-maximized");
 		options.addArguments("--lang=ko");
-		options.addArguments("--no-sandbox");
+		// options.addArguments("--no-sandbox");
 		options.addArguments("--disable-dev-shm-usage");
 		options.addArguments("--disable-gpu");
 
@@ -80,7 +82,8 @@ public class ClassUCrawling {
 			List<String> subcategories = new ArrayList<>();
 			String url = CLASSU_URL + category;
 			Optional<Tag> tag = tagRepository.findByName(category);
-			if(tag.isEmpty())tag = Optional.of(tagRepository.save(new Tag(category)));
+			if (tag.isEmpty())
+				tag = Optional.of(tagRepository.save(new Tag(category)));
 
 			categoryDriver.get(url);
 			Thread.sleep(1000);
@@ -117,7 +120,8 @@ public class ClassUCrawling {
 	private void getData(String sub, Tag tag) throws InterruptedException, IOException {
 		List<Lecture> lectureList = new ArrayList<>();
 		Optional<Tag> subtag = tagRepository.findByName(sub);
-		if(subtag.isEmpty())subtag = Optional.of(tagRepository.save(new Tag(sub)));
+		if (subtag.isEmpty())
+			subtag = Optional.of(tagRepository.save(new Tag(sub)));
 		Thread.sleep(1000);
 		List<WebElement> elements = categoryDriver
 			.findElements(
@@ -145,7 +149,9 @@ public class ClassUCrawling {
 		}
 
 		for (Lecture lecture : lectureList) {
-			Lecture lec = lectureRepository.save(lecture);
+			Lecture lec = lectureRepository
+				.findLectureByLectureId(lecture.getLectureId())
+				.orElseGet(() -> lectureRepository.save(lecture));
 			LectureTag lectureTag1 = new LectureTag();
 			lectureTag1.setLecture(lec);
 			lectureTag1.setTag(tag);
