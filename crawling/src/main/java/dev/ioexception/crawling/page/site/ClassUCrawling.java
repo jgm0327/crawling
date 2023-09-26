@@ -41,8 +41,8 @@ public class ClassUCrawling {
 	private final UploadImage uploadImage;
 
 	public void process() throws IOException {
-		//System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
-		System.setProperty("webdriver.chrome.driver", "C:\\Users\\user\\Desktop\\chromedriver-win64\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
+		// System.setProperty("webdriver.chrome.driver", "C:\\Users\\user\\Desktop\\chromedriver-win64\\chromedriver.exe");
 
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--disable-popup-blocking");       //팝업안띄움
@@ -50,7 +50,7 @@ public class ClassUCrawling {
 		options.addArguments("--disable-gpu");            //gpu 비활성화
 		options.addArguments("--start-maximized");
 		options.addArguments("--lang=ko");
-		// options.addArguments("--no-sandbox");
+		options.addArguments("--no-sandbox");
 		options.addArguments("--disable-dev-shm-usage");
 		options.addArguments("--disable-gpu");
 
@@ -95,7 +95,6 @@ public class ClassUCrawling {
 			}
 
 			for (String sub : subcategories) {
-				System.out.println(url + "&subCategoryId=" + sub);
 				categoryDriver.get(url + "&subCategoryId=" + sub);
 				Thread.sleep(1000);
 				Long last_height = (Long)((JavascriptExecutor)categoryDriver).executeScript(
