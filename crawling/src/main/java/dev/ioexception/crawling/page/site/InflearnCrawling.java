@@ -32,7 +32,7 @@ public class InflearnCrawling {
     public void getLecture() {
         Document document;
         try {
-            document = Jsoup.connect("https://www.inflearn.com/courses").get();
+            document = Jsoup.connect("https://www.inflearn.com/courses?order=seq&types=ONLINE").get();
         } catch (IOException e) {
             // 예외 처리 추가
             e.printStackTrace();
