@@ -1,5 +1,7 @@
 package dev.ioexception.crawling.repository;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import dev.ioexception.crawling.entity.Lecture;
@@ -9,4 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LectureRepository extends JpaRepository<Lecture, Long> {
 	Optional<Lecture> findLectureByLectureId(String lectureId);
+
+	List<Lecture> findAllByDate(LocalDate localDate);
 }
