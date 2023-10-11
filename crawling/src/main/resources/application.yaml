@@ -4,9 +4,10 @@ server:
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://crawling-server.c4y9vm1irfhh.ap-northeast-2.rds.amazonaws.com:3306/classmoa
-    username: admin
-    password: adminadmin
+#    url: jdbc:mariadb://crawling-server.c4y9vm1irfhh.ap-northeast-2.rds.amazonaws.com:3306/classmoa
+    url: jdbc:mariadb://localhost:3306/kakao
+    username: root
+    password: 1234
 
   #의존성 추가
   servlet:
