@@ -38,7 +38,9 @@ dependencies {
     //spring-cloud-starter-aws 라이브러리 추가
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     //opensearch 라이브러리 추가
-    implementation group: 'org.opensearch.client', name: 'opensearch-rest-high-level-client', version: '1.2.4'
+    // https://mvnrepository.com/artifact/org.opensearch.client/opensearch-rest-high-level-client
+    implementation 'org.opensearch.client:opensearch-rest-high-level-client:2.10.0'
+
 }
 
 tasks.named('test') {

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequestInterceptor;
+import org.opensearch.action.DocWriteRequest;
 import org.opensearch.action.index.IndexRequest;
 import org.opensearch.action.index.IndexResponse;
 import org.opensearch.client.RequestOptions;
@@ -50,22 +51,26 @@ public class CrawlingController {
 
 		// Create the document as a hash map
 		Map<String, Object> document = new HashMap<>();
-		document.put("title", "오픈서치 강의3");
-		document.put("instructor", "임창준3");
-		document.put("companyNmae", "카클스3");
-		document.put("ordinaryPrice", 100003);
-		document.put("salePrice", 70003);
-		document.put("salePercent", "33%");
-		document.put("imageLink", "naver.com3");
+		document.put("title", "오픈서치 강의2");
+		document.put("instructor", "임창준");
+		document.put("companyNmae", "카클스");
+		document.put("ordinaryPrice", 10000);
+		document.put("salePrice", 7000);
+		document.put("salePercent", "30%");
+		document.put("imageLink", "naver.com");
 
 		log.info("------------------------------------->Map");
 
 		// Form the indexing request, send it, and print the response
-		IndexRequest request = new IndexRequest("lectures", "_doc", "1").source(document);
-		IndexResponse response = searchClient.index(request, RequestOptions.DEFAULT);
+		IndexRequest request1 = new IndexRequest();
+		request1 = request1.opType(DocWriteRequest.OpType.INDEX).index("lecture").source(document);
+		IndexResponse response = searchClient.index(request1, RequestOptions.DEFAULT);
+		System.out.println(response.getResult().name());
+
 		System.out.println("response=========>" + response.toString());
 		System.out.println("response Result=========>" + response.getIndex());
-		return response.toString();
+
+		return null;
 
 	}
 
