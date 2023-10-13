@@ -39,4 +39,9 @@ public class LectureTag {
         this.tag = tag;
         tag.getLectureTags().add(this);
     }
+
+    public Long getTagId(Tag tag){
+        this.tag = tag;
+        return tag.getTagId();
+    }
 }
