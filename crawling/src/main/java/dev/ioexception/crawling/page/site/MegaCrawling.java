@@ -56,6 +56,7 @@ public class MegaCrawling {
                     .build();
                 lectureRepository.save(lecture);
 
+
                 // 태그 저장
                 Tag tag = tagRepository.findByName(getTagName(content))
                     .orElseGet(() -> tagRepository.save(Tag.builder().name(getTagName(content)).build()));
