@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class GoormCrawling {
     private final LectureRepository lectureRepository;
     private final TagRepository tagRepository;
@@ -68,6 +70,8 @@ public class GoormCrawling {
 
                     lectureTagRepository.save(lectureTag);
                 }
+
+                log.info("Crawling goorm page: " + i);
             }
         }
     }

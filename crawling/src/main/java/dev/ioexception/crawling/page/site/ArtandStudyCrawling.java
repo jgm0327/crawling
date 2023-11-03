@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -27,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class ArtandStudyCrawling {
 
     private final LectureRepository lectureRepository;
@@ -86,6 +88,7 @@ public class ArtandStudyCrawling {
                     lectureTag.setLecture(newLecture);
                     lectureTagRepository.save(lectureTag);
                 }
+                log.info("Crawling art and study page: " + i);
             }
         }
     }

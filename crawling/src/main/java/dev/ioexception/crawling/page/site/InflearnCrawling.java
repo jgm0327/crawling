@@ -34,7 +34,6 @@ public class InflearnCrawling {
         try {
             document = Jsoup.connect("https://www.inflearn.com/courses?order=seq&types=ONLINE").get();
         } catch (IOException e) {
-            // 예외 처리 추가
             e.printStackTrace();
             return;
         }
@@ -52,7 +51,7 @@ public class InflearnCrawling {
         try {
             Document documentPage = Jsoup.connect(
                     "https://www.inflearn.com/courses?order=seq&types=ONLINE&page=" + page).get();
-            System.out.println("Crawling page: " + page);
+            log.info("Crawling inflearn page: " + page);
 
             Elements contents = documentPage.select(
                     "main.courses_main div.courses_container div.courses_card_list_body div.is-3-widescreen div.course_card_item");

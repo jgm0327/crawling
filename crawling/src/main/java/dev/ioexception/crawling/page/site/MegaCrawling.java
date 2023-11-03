@@ -12,6 +12,7 @@ import dev.ioexception.crawling.repository.LectureTagRepository;
 import dev.ioexception.crawling.repository.TagRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -24,6 +25,7 @@ import dev.ioexception.crawling.repository.LectureRepository;
 @Component
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class MegaCrawling {
     private final LectureRepository lectureRepository;
     private final TagRepository tagRepository;
@@ -67,6 +69,8 @@ public class MegaCrawling {
                 lectureTag.setTag(tag);
                 lectureTagRepository.save(lectureTag);
             }
+
+            log.info("Crawling mega page: " + i);
         }
     }
 
