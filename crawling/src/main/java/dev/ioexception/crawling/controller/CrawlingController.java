@@ -63,7 +63,7 @@ public class CrawlingController {
 
 		List<Lecture> lectures = lectureRepository.findAllByDate(LocalDate.now());
 		for (Lecture lecture : lectures) {
-			List<LectureTag> lectureTags = lectureTagRepository.findAllByLecture_LectureId(lecture.getLectureId());
+			List<LectureTag> lectureTags = lectureTagRepository.getLectureTags(lecture.getLectureId());
 			LectureTag lectureTag = lectureTags.get(0);
 			Long tagId = lectureTag.getTagId(lectureTag.getTag());
 			Optional<Tag> tag = tagRepository.findById(tagId);
@@ -76,11 +76,13 @@ public class CrawlingController {
 			document.put("ordinaryPrice", lecture.getOrdinaryPrice());
 			document.put("salePrice", lecture.getSalePrice());
 			document.put("salePercent", lecture.getSalePercent());
+			document.put("siteLink", lecture.getSiteLink());
 			document.put("imageLink", lecture.getImageLink());
 			document.put("tag", tag.get().getName());
 
 			IndexRequest request = new IndexRequest();
-			request = request.opType(DocWriteRequest.OpType.INDEX).index("lecture").id(lecture.getLectureId()).source(document);
+			request = request.opType(DocWriteRequest.OpType.INDEX)
+					.index("search").id(lecture.getLectureId()).source(document);
 			searchClient.index(request, RequestOptions.DEFAULT);
 		}
 

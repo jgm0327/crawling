@@ -23,7 +23,7 @@ public class LectureTag {
     private Long lectagId;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "lectureId", referencedColumnName = "lectureId")
+    @JoinColumn(name = "lecture_id", referencedColumnName = "lecture_id")
     private Lecture lecture;
 
     @ManyToOne(fetch = LAZY)

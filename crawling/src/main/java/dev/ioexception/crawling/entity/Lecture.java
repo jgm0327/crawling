@@ -28,6 +28,8 @@ public class Lecture {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "lecture_id")
     private String lectureId;
     private String title;
     private String instructor;
