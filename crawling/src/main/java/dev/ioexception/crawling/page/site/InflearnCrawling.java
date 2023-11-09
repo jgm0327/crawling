@@ -68,6 +68,9 @@ public class InflearnCrawling {
             String lectureId = getCourseNumber(content);
             String imageLink = uploadImage.uploadFromUrlToS3(getImage(content), SITE_NAME, lectureId);
 
+            if(getPrice(content) == -2){
+                continue;
+            }
             Lecture lecture = Lecture.builder()
                     .lectureId(lectureId)
                     .imageLink(imageLink)
@@ -81,7 +84,8 @@ public class InflearnCrawling {
                     .date(LocalDate.now())
                     .build();
 
-            lectureRepository.save(lecture);
+            Lecture savedLecture = lectureRepository.findByLectureIdAndDate(lectureId, LocalDate.now())
+                    .orElseGet(() -> lectureRepository.save(lecture));
 
             StringTokenizer tags = new StringTokenizer(getTag(content).replaceAll("·", ","), ",");
 
@@ -89,7 +93,7 @@ public class InflearnCrawling {
                 String tag = tags.nextToken().trim();
                 Tag tagId = existTag(tag);
 
-                saveLecTag(lecture, tagId);
+                saveLecTag(savedLecture, tagId);
             }
         }
     }
@@ -139,6 +143,10 @@ public class InflearnCrawling {
 
             if (price.equals("무료")) {
                 return 0;
+            }
+
+            if(price.equals("미설정")){
+                return -2;
             }
 
             return Integer.parseInt(price);

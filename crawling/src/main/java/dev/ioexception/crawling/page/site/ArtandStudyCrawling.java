@@ -13,6 +13,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,7 +80,7 @@ public class ArtandStudyCrawling {
                             .build();
 
                     Lecture newLecture = lectureRepository
-                        .findLectureByLectureId(lectureId)
+                        .findByLectureIdAndDate(lectureId, LocalDate.now())
                         .orElseGet(() -> lectureRepository.save(lecture));
 
                     // 강의 태그 중간테이블을 저장한다.

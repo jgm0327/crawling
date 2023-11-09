@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LectureRepository extends JpaRepository<Lecture, Long> {
 	Optional<Lecture> findLectureByLectureId(String lectureId);
+	Optional<Lecture> findByLectureIdAndDate(String lectureId, LocalDate now);
 
 	List<Lecture> findAllByDate(LocalDate localDate);
 }
