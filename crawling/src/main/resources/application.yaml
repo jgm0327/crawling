@@ -1,18 +1,18 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://crawling-server.c4y9vm1irfhh.ap-northeast-2.rds.amazonaws.com:3306/test2 #jdbc:mariadb://192.168.201.229:3306/kakao
-    username: admin
-    password: adminadmin
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${jdbcURL}
+    username: ${jdbcUsername}
+    password: ${jdbcPassword}
 
   #의존성 추가
   servlet:
     multipart:
-      max-request-size: 30MB
-      max-file-size: 30MB
+      max-request-size: 52428800
+      max-file-size: 52428800
 
   jpa:
     open-in-view: false

@@ -197,13 +197,13 @@ public class YbmCrawling{
 
 		return result;
 	}
-	private String getImage(WebElement li) throws IOException {
+	private String getImage(WebElement li) throws Exception {
 		// 드라이버에서 이미지 선택 (현재 LI 태그 내에서 선택)
 		WebElement lectureContainer = li.findElement(By.cssSelector("div.ibox > a > span > img"));
 		// 이미지 태그의 src 속성값을 가져옵니다.
 		String srcValue = lectureContainer.getAttribute("src");
 
-		return uploadImage.uploadFromUrlToS3(srcValue, "ybm", getLectureId(li));
+		return uploadImage.uploadFromUrlToLocal(srcValue, "ybm", getLectureId(li));
 	}
 	public  String getTitle(WebElement li){
 		// 강의 infobox 가져오기

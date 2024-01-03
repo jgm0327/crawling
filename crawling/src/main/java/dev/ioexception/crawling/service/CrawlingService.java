@@ -24,30 +24,30 @@ public class CrawlingService {
     private final ClassUCrawling classUCrawling;
     private final InflearnCrawling inflearnCrawling;
 
-    public void getMega() throws IOException {
+    public void getMega() throws Exception {
         megaCrawling.getSaleLecture();
     }
 
-    public void getYbm() throws IOException, InterruptedException {
+    public void getYbm() throws Exception {
 
         ybmCrawling.getSaleLecture();
     }
 
-    public void getArtandStudy() throws IOException, InterruptedException {
+    public void getArtandStudy() throws Exception{
 
         artandStudyCrawling.getSaleLecture();
     }
 
-    public void getGoorm() throws IOException {
+    public void getGoorm() throws Exception {
 
         goormCrawling.getSaleLecture();
     }
 
-    public void getClassu() throws IOException {
+    public void getClassu() throws Exception{
         classUCrawling.process();
     }
   
-    public void getInflearn() {
+    public void getInflearn() throws Exception{
         inflearnCrawling.getLecture();
     }
 }

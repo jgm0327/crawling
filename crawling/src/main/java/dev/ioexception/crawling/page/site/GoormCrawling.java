@@ -29,7 +29,7 @@ public class GoormCrawling {
     private final UploadImage uploadImage;
 
 
-    public void getSaleLecture() throws IOException {
+    public void getSaleLecture() throws Exception {
         Document document = Jsoup.connect("https://edu.goorm.io/category/programming").get();
 
         for(int j = 2; j <= 17; j++) {
@@ -83,10 +83,10 @@ public class GoormCrawling {
         return "goorm"+parts[2];
     }
 
-    private String getImage(Element content) throws IOException {
+    private String getImage(Element content) throws Exception {
         String imageUrl = content.select("div._31ylS5 > img").attr("data-src");
-
-        return uploadImage.uploadFromUrlToS3(imageUrl, "goorm", getId(content));
+        System.out.println(imageUrl);
+        return uploadImage.uploadFromUrlToLocal(imageUrl, "goorm", getId(content));
     }
 
     private String getSalePercent(Element content) throws IOException {

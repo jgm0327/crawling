@@ -2,9 +2,6 @@ package dev.ioexception.crawling.page.site;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,7 +10,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +33,7 @@ public class ArtandStudyCrawling {
     private final TagRepository tagRepository;
     private final UploadImage uploadImage;
 
-    public void getSaleLecture() throws IOException {
+    public void getSaleLecture() throws Exception {
         String[][] sub_category = {{},
                 {"", "철학입문", "서양고대철학", "근대현대철학", "동양철학", "정신분석/심리학", "윤리학", "정치철학"},
                 {"", "시", "소설", "문학일반", "문예창작"},
@@ -121,7 +117,7 @@ public class ArtandStudyCrawling {
         return Integer.parseInt(elements.text().replaceAll("[^0-9]", ""));
     }
 
-    private String getImage(Element content) throws IOException {
+    private String getImage(Element content) throws Exception {
         // 이미지를 가져온다.
         Element imgElement = content.selectFirst("li > ul > li:nth-child(1) > div");
         // Style 속성값을 가져온다.
@@ -136,7 +132,7 @@ public class ArtandStudyCrawling {
         }
         imageUrl = "https://www.artnstudy.com" + imageUrl;
 
-        return uploadImage.uploadFromUrlToS3(imageUrl, "artandstudy", getLectureId(content));
+        return uploadImage.uploadFromUrlToLocal(imageUrl, "artandstudy", getLectureId(content));
     }
 
     private String getUrl(Element content) {

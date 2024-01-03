@@ -15,12 +15,12 @@ public class CrawlingController {
     private final IndexService indexService;
 
     @GetMapping("/crawling")
-    public void crawling() throws IOException, InterruptedException {
+    public void crawling() throws Exception {
         crawlingService.getMega();
-        crawlingService.getGoorm();
+//        crawlingService.getGoorm();
         crawlingService.getArtandStudy();
         crawlingService.getInflearn();
-        indexService.inputIndex();
+//        indexService.inputIndex();
         // crawlingService.getClassu();
         // crawlingService.getYbm();
     }

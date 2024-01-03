@@ -40,7 +40,7 @@ public class ClassUCrawling {
 	private final LectureTagRepository lectureTagRepository;
 	private final UploadImage uploadImage;
 
-	public void process() throws IOException {
+	public void process() throws Exception {
 		System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
 		// System.setProperty("webdriver.chrome.driver", "C:\\Users\\user\\Desktop\\chromedriver-win64\\chromedriver.exe");
 
@@ -67,7 +67,7 @@ public class ClassUCrawling {
 		}
 	}
 
-	private void categoryMove() throws InterruptedException, IOException {
+	private void categoryMove() throws Exception{
 		categoryDriver.get(CLASSU_URL);
 		Thread.sleep(1000);
 		List<WebElement> elements = categoryDriver.findElements(
@@ -116,7 +116,7 @@ public class ClassUCrawling {
 		}
 	}
 
-	private void getData(String sub, Tag tag) throws InterruptedException, IOException {
+	private void getData(String sub, Tag tag) throws Exception {
 		List<Lecture> lectureList = new ArrayList<>();
 		Optional<Tag> subtag = tagRepository.findByName(sub);
 		if (subtag.isEmpty())
@@ -205,9 +205,9 @@ public class ClassUCrawling {
 		return element.findElement(By.tagName("span")).getAttribute("innerHTML");
 	}
 
-	private String getImage(WebElement element) throws IOException {
+	private String getImage(WebElement element) throws Exception {
 		return uploadImage
-			.uploadFromUrlToS3(element.findElement(By.cssSelector("div.sc-62320715-1.jgQDxN"))
+			.uploadFromUrlToLocal(element.findElement(By.cssSelector("div.sc-62320715-1.jgQDxN"))
 					.getAttribute("src"),
 				"classU", getId(element));
 	}

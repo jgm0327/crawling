@@ -2,8 +2,6 @@ package dev.ioexception.crawling.page.site;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import dev.ioexception.crawling.entity.LectureTag;
 import dev.ioexception.crawling.entity.Tag;
@@ -32,7 +30,7 @@ public class MegaCrawling {
     private final LectureTagRepository lectureTagRepository;
     private final UploadImage uploadImage;
 
-    public void getSaleLecture() throws IOException {
+    public void getSaleLecture() throws Exception {
         Document document = Jsoup.connect("https://megastudyacademy.co.kr/lecture_list").get();
 
         String page = document.select("body > div.lecture > div > div.lecture_listView > div.paging > ul > li > a.last").attr("href").replaceAll("[^0-9]","");
@@ -80,11 +78,9 @@ public class MegaCrawling {
         return "mega"+parts[2];
     }
 
-    private String getImage(Element content) throws IOException {
+    private String getImage(Element content) throws Exception {
         String imageUrl = content.select("a > div:nth-child(1) > img").attr("src");
-        String image = uploadImage.uploadFromUrlToS3(imageUrl, "mega", getId(content));
-
-        return image;
+        return uploadImage.uploadFromUrlToLocal(imageUrl, "mega", getId(content));
     }
 
     private String getSalePercent(Element content) throws IOException {

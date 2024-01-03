@@ -29,7 +29,7 @@ public class InflearnCrawling {
 
     private static final String SITE_NAME = "inflearn";
 
-    public void getLecture() {
+    public void getLecture() throws Exception{
         Document document;
         try {
             document = Jsoup.connect("https://www.inflearn.com/courses?order=seq&types=ONLINE").get();
@@ -47,7 +47,7 @@ public class InflearnCrawling {
         }
     }
 
-    public void crawlPage(int page) {
+    public void crawlPage(int page) throws Exception{
         try {
             Document documentPage = Jsoup.connect(
                     "https://www.inflearn.com/courses?order=seq&types=ONLINE&page=" + page).get();
@@ -63,10 +63,10 @@ public class InflearnCrawling {
         }
     }
 
-    private void saveLecture(Elements contents) throws IOException {
+    private void saveLecture(Elements contents) throws Exception {
         for (Element content : contents) {
             String lectureId = getCourseNumber(content);
-            String imageLink = uploadImage.uploadFromUrlToS3(getImage(content), SITE_NAME, lectureId);
+            String imageLink = uploadImage.uploadFromUrlToLocal(getImage(content), SITE_NAME, lectureId);
 
             if(getPrice(content) == -2){
                 continue;
